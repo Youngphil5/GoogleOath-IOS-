@@ -88,9 +88,10 @@ extension LoginViewController {
                 
                 switch result {
                 case .success(let user):
-                    self?.showMessage(title: "Success", message: "user signed in successfully!")
-                    
                     self!.fillInMissenUserData(GoogleUser: googleUser, regularUser: user);
+                    self?.showMessage(title: "Success", message: "\(User.current!.FullName!) signed in successfully!")
+                    
+                    
                     // print(user);
                 case .failure(let error):
                     // Handle the error if the login process failed
