@@ -5,7 +5,7 @@ Xcode and how to integerate google login with parse swift.
 Steps for integration can be found here: 
 https://www.back4app.com/docs/ios/parse-swift-sdk/users/sign-in-with-google
 
-Note: step 2 in above resource has some code that don’t work.
+**Note: step 2 in above resource has some code that don’t work.**
 Use this resource as support
 https://stackoverflow.com/questions/74042206/where-did-configuration-argument-go-from-gidsignin-method
 
