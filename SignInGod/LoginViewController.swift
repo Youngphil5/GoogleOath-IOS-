@@ -18,7 +18,6 @@ class LoginViewController: UIViewController {
     @IBAction func OnClickGoogleBtn(_ sender: Any) {
         handleSignInWithGoogle();
     }
-    
 }
 
 extension LoginViewController {
@@ -60,10 +59,10 @@ extension LoginViewController {
         // Start the sign in flow!
         
         // we passing the rootViewContoller so that it know
-        // the dimenntion of our screen which help positon
-        // the google sign in winndow well for bigger devices.
+        // the dimention of our screen which help positon
+        // the google sign in window well for bigger devices.
     
-        GIDSignIn.sharedInstance.signIn(withPresenting: rootViewContoller){
+        GIDSignIn.sharedInstance.signIn(withPresenting: rootViewContoller) {
             [weak self] authentication, error in
             
             if let error = error {
@@ -82,21 +81,23 @@ extension LoginViewController {
                 return;
             }
             
+            
             // Sign in the user in our Back4App application.
             User.google.login(id:userId, idToken: idToken.tokenString){
                 [weak self] result in
                 
                 switch result {
-                case .success(let user):
-                    self!.fillInMissenUserData(GoogleUser: googleUser, regularUser: user);
-                    self?.showMessage(title: "Success", message: "\(User.current!.FullName!) signed in successfully!")
                     
+                case .success(var user):
+            
+                   user = self!.fillInMissenUserData(GoogleUser: googleUser, regularUser: user);
                     
-                    // print(user);
+                    self?.showMessage(title: "Success", message:
+                                        "\(user.FullName!) signed in successfully!")
+                    
                 case .failure(let error):
                     // Handle the error if the login process failed
                     self?.showMessage(title: "Failed to sign in", message: error.message)
-                    
                 }
                 
             }
@@ -107,18 +108,25 @@ extension LoginViewController {
     func logoutCurrentUser() {
         let currentUser = User.current;
         
+        // handel signout in parse swift
         if ((currentUser) != nil) {
             do{
                 try User.logout()
+                
                 print("previous user logged out!")
             }
             catch{
                 print("No user to logout")
             }
         }
+        
+        // handele signout for google
+        if (GIDSignIn.sharedInstance.hasPreviousSignIn()){
+            GIDSignIn.sharedInstance.signOut();
+        }
     }
     
-    func fillInMissenUserData(GoogleUser: GIDGoogleUser, regularUser: User){
+    func fillInMissenUserData(GoogleUser: GIDGoogleUser, regularUser: User)-> User{
         var user = regularUser;
         
         // we directly add in info that
@@ -145,6 +153,7 @@ extension LoginViewController {
         else{
             print("User needs no update!")
         }
+       return user;
     }
 }
 
