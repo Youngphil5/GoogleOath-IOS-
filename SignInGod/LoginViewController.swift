@@ -99,7 +99,6 @@ extension LoginViewController {
                     // Handle the error if the login process failed
                     self?.showMessage(title: "Failed to sign in", message: error.message)
                 }
-                
             }
         }
     }
